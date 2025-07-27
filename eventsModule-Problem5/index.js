@@ -22,6 +22,18 @@ app.get("/emit",(req,res)=>{
 app.get("/delay",async(req,res)=>{
     const txt=req.query.message
     const time=+req.query.time
+
+    if (!txt && !time) {
+        return res.json({ error: "Please provide a message and a time query parameter" });
+    }
+
+    if (!txt){
+        return res.json({error:"Please provide a message parameter"});
+    }
+    if (!time){
+        return res.json({error: "Please provide a delay parameter"});
+    }
+
     const result=await delay(txt,time)
     res.send(result)
 })
