@@ -10,8 +10,8 @@ const orderSchema=new mongoose.Schema({
     }
     ],
     totalAmount:Number,
-    createdAt:time
+    createdAt:{type:String,default:time}
 })
 
 const OrderModel=mongoose.model("orders",orderSchema)
-module.expo
+module.export=OrderModel
