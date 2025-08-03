@@ -1,0 +1,36 @@
+1. db.recipes.find({cuisine: "Italian"})
+2. db.recipes.find({prep_time:{$lt:30}})
+3. db.recipes.find({price:{$gt:500}})
+4. db.recipes.find().sort({ price: 1 })
+5. db.recipes.updateOne({ recipe_id: 2 },{ $set: { price: 900 } })
+6. db.recipes.find({},{name:1,price:1,_id:0})
+7. db.recipes.find({difficulty:"medium",price:{$lt:600}})
+8. db.recipes.find().sort({prep_time:-1})
+9. db.recipes.insertOne({
+    "recipe_id": 11,
+    "name": "Chocolate Cake",
+    "ingredients": ["Flour", "Sugar", "Cocoa Powder", "Eggs", "Butter"],
+    "cuisine": "American",
+    "prep_time": 50,
+    "difficulty": "medium",
+    "price": 750
+    })
+10. db.recipes.deleteOne({recipe_id:4})
+11. db.recipes.find({cuisine:{$in:["Japanese","Thai"]}})
+12. db.recipes.find({ingredients:"Egg"})
+13. db.recipes.updateOne({recipe_id: 7},{$set:{prep_time:35}})
+14. db.recipes.deleteMany({price:{$gt:1000}})
+15. db.recipes.find().limit(3)
+16. db.recipes.find().skip(2).limit(3)
+17. db.recipes.find({cuisine:"Thai"}).sort({price:-1})
+18. db.recipes.insertOne({
+    "recipe_id": 12,
+    "name": "Hummus",
+    "ingredients": ["Chickpeas", "Tahini", "Garlic", "Olive Oil", "Lemon Juice"],
+    "cuisine": "Middle Eastern",
+    "prep_time": 15,
+    "difficulty": "easy",
+    "price": 300
+    })
+19.db.recipes.countDocuments({difficulty:"easy"})
+20. db.recipes.find({prep_time:{$gt:40}})
