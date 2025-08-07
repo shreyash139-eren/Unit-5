@@ -33,4 +33,13 @@ const addProfile=async(req,res)=>{
     }
 }
 
-module.exports={addUser,addProfile}
+const getAllProfiles=async(req,res)=>{
+    try {
+        let profiles=await ProfileModel.find().populate("user")
+        res.status(200).json({message:"Profiles list",profiles})
+    } catch (error) {
+        res.status(500).json({error:"Something Went Wrong"})
+    }
+}
+
+module.exports={addUser,addProfile,getAllProfiles}
