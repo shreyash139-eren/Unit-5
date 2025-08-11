@@ -74,4 +74,4 @@ const getAllGames=async(req,res)=>{
   }
 }
 
-module.exports={addPublisher,getPublishers,getPublisherById,updatePublisher,deletePublisher}
+module.exports={addPublisher,getPublishers,getPublisherById,updatePublisher,deletePublisher,getAllGames}
