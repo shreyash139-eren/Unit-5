@@ -1,4 +1,5 @@
 const PublisherModel = require("../models/publisher.model");
+const GameModel=require("../models/game.model")
 
 const addPublisher = async (req, res) => {
   try {
@@ -58,5 +59,19 @@ const deletePublisher = async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 };
+
+const getAllGames=async(req,res)=>{
+  try{
+    const {publisherId}=req.params
+    let publisher=await PublisherModel.findById(publisherId)
+    if(!publisher){
+      return res.status(404).json({message:"No publisher found"})
+    }
+    let games=await GameModel.find({publisher:publisherId}).populate()
+    res.status(200).json({message:"All game created by this publisher",games})
+  }catch(error){
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}
 
 module.exports={addPublisher,getPublishers,getPublisherById,updatePublisher,deletePublisher}
