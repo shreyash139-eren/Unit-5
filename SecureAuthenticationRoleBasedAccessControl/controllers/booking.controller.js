@@ -70,7 +70,7 @@ const deleteBooking=async(req,res)=>{
             if(booking.status==="pending"){
                 booking.status="rejected"
                 await booking.save()
-                res.status(200).json({message:"booking rejected"})
+                res.status(200).json({message:"booking cancelled"})
             }else{
                 res.status(400).json({message:`Booking ${booking.status}`})
             }
@@ -80,6 +80,43 @@ const deleteBooking=async(req,res)=>{
     }
 }
 
+const approveBooking=async(req,res)=>{
+    try {
+        const {id}=req.params
+        let booking=await BookingModel.findById(id)
+        if(!booking){
+            return res.status(404).json({message:"No booking found"})
+        }
+        if(booking.status==="pending"){
+            booking.status="approved"
+            await booking.save()
+            return res.status(200).json({message:"Booking approved"})
+        }else{
+            return res.status(400).json({message:`Booking ${booking.status}`})
+        }
+    } catch (error) {
+        res.status(500).json({message:"Something went wrong, try again later"})
+    }
+}
+
+const rejectBooking=async(req,res)=>{
+    try {
+        const {id}=req.params
+        let booking=await BookingModel.findById(id)
+        if(!booking){
+            return res.status(404).json({message:"No booking found"})
+        }
+        if(booking.status==="pending"){
+            booking.status="rejected"
+            await booking.save()
+            return res.status(200).json({message:"Booking rejected"})
+        }else{
+            return res.status(400).json({message:`Booking already ${booking.status}`})
+        }
+    } catch (error) {
+        res.status(500).json({message:"Something went wrong, try again later"})
+    }
+}
 
 
-module.exports={addBooking,getBookings,updateBooking,deleteBooking}
+module.exports={addBooking,getBookings,updateBooking,deleteBooking,approveBooking,rejectBooking}
