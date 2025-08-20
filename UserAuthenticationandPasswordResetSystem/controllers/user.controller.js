@@ -2,7 +2,19 @@ const UserModel = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+const nodemailer = require("nodemailer")
 const salt = 10;
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.GOOGLE_APP_EMAIL,
+    pass: process.env.GOOGLE_APP_PASSWORD,
+  },
+});
+  
 
 const signup = async (req, res) => {
   try {
@@ -55,8 +67,8 @@ const forgotPassword = async (req, res) => {
     } else {
       let resetToken = jwt.sign(
         { userId: user._id },
-        process.env.JWT_SECRET_KEY,{expiresIn:60*5});
-      let resetLink = `http://localhost/3000/resetpassword?token=${resetToken}`;
+        process.env.JWT_SECRET_KEY,{expiresIn:60*15});
+      let resetLink = `http://localhost:3000/resetpassword?token=${resetToken}`;
       await transporter.sendMail({
         from: '"shreyash" <shreyash@gmail.com>',
         to: user.email,
@@ -73,4 +85,30 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, forgotPassword };
+const resetPassword=async(req,res)=>{
+    try {
+        const {token}=req.query
+        const {newPassword}=req.body
+        let decoded=jwt.verify(token,process.env.JWT_SECRET_KEY)
+        if(decoded){
+            let user=await UserModel.findById(decoded.userId)
+            bcrypt.hash(newPassword,salt,async function(err,hash){
+                if(err){
+                    return res.status(500).json({message:"Something went wrong"})
+                }else{
+                    user.password=hash
+                    await user.save()
+                    res.status(200).json({message:"Pasword changed"})
+                }
+            })
+        }
+    } catch (error) {
+        if(error.message==="jwt expired"){
+            res.status(403).json({message:"Token expired"})
+        }else{
+            res.status(500).json({message:"Something went wrong"})
+        }
+    }
+}
+
+module.exports = { signup, login, forgotPassword, resetPassword};
