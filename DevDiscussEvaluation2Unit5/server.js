@@ -14,7 +14,7 @@ app.use("/api/auth/",UserRouter)
 
 app.use("/api/posts",PostRouter)
 
-app.use("/api/analytics",AnalyticsRouter)
+// app.use("/api/analytics",AnalyticsRouter)
 
 app.use((req,res)=>{
     res.status(404).json({message:"Invalid Route"})
